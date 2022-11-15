@@ -41,13 +41,14 @@ async def post_encode(_uuid: str, msg: str):
 
     bmp_array = bytearray(bmp)
 
+    msg = msg + '.'
     bits = []
     for i in range(len(msg)):
         for j in range(7, -1, -1):
             bits.append(nth_bit_present(bytearray(msg, 'utf-8')[i], j))
 
     if (len(bits) >= len(bmp_array) + offset):
-        return {""}
+        return {"uu"}
 
     for i in range(len(bits)):
         bmp_array[i + offset] = set_lsb(bmp_array[i + offset], bits[i])
@@ -82,6 +83,9 @@ async def get_decode(_uuid: str):
 
     out = []
     for b in out_bytes:
+        if chr(b) == ".":
+            break
         out.append(chr(b))
+
 
     return {"msg": ''.join(out)}
